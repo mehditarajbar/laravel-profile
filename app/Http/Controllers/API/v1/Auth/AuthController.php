@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\V01\Auth;
+namespace App\Http\Controllers\API\v1\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -8,6 +8,7 @@ use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
@@ -27,7 +28,7 @@ class AuthController extends Controller
         resolve(UserRepository::class)->create($request);
         return response()->json([
             'message'=>'user created success',
-        ],201);
+        ],Response::HTTP_CREATED);
     }
 
     /**
@@ -44,7 +45,7 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($request->only(['email','password']))){
-            return response()->json(Auth::user(),200);
+            return response()->json(Auth::user(),Response::HTTP_OK);
         }
         throw ValidationException::withMessages([
            'email'=>'incorrect credentials.'
@@ -52,15 +53,14 @@ class AuthController extends Controller
     }
     public function user()
     {
-        return response()->json(Auth::user(),200);
+        return response()->json(Auth::user(),Response::HTTP_OK);
     }
     public function logout()
     {
         Auth::logout();
         return response()->json([
            'message'=>'logout success'
-        ],200);
+        ],Response::HTTP_OK);
     }
-
 
 }

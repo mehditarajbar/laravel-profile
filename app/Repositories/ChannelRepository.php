@@ -3,20 +3,38 @@
 namespace App\Repositories;
 
 use App\Models\Channel;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class ChannelRepository
 {
+    public function all()
+    {
+        return Channel::all();
+
+    }
+
     /**
-     * @return void
+     * @param $name
      */
-    private function create(Request $request): void
+    public function create($name): void
     {
         Channel::create([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name)
+            'name' => $name,
+            'slug' => Str::slug($name)
         ]);
+    }
+
+    public function update($id, $name)
+    {
+        Channel::find($id)->update([
+            'name' => $name,
+            'slug' => Str::slug($name)
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        Channel::destroy($id);
     }
 
 }
