@@ -4,6 +4,7 @@ namespace Test\Unit\API\v1\Auth;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
@@ -26,10 +27,10 @@ class AuthTest extends TestCase
             }
         }
         $getConfigPermissions=config('permission.default_permissions');
-        $permissionInDatabase = Role::query()->where('name', $getConfigPermissions[0]);
+        $permissionInDatabase = Permission::query()->where('name', $getConfigPermissions[0]);
         if ($permissionInDatabase->count() < 1) {
             foreach ($getConfigPermissions as $permission){
-                Role::query()->create([
+                Permission::query()->create([
                     'name'=>$permission,
                 ]);
             }
